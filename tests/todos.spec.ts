@@ -150,7 +150,7 @@ test.describe('TODOS API TESTING', () => {
             })
 
             expect(response.ok()).toBeTruthy();
-            expect(response.status()).toBe(202);
+            expect(response.status()).toBe(201);
 
             const data = await response.json();
 
@@ -159,45 +159,45 @@ test.describe('TODOS API TESTING', () => {
             expect(data.title).toBe(update_todos.title);
             expect(data.completed).toBe(update_todos.completed);
         });
-
-
-
-        test(`PATCH	/todos/${todoId}`, async ({ request }) => {
-
-            const partial_update_todo = {
-                title: 'Partial update title'
-            };
-
-
-            const response = await request.patch(`${BASE_URL}/todos/${todoId}`, {
-                data: partial_update_todo
-            })
-
-            expect(response.ok()).toBeTruthy();
-            expect(response.status()).toBe(200);
-
-            const data = await response.json();
-            expect(data.id).toBe(todoId);
-            expect(data.title).toBe(partial_update_todo.title);
-            expect(data.userId).toBeDefined();
-            expect(data.completed).toBeDefined();
-
-        })
-
-        test(`DELETE	/todos/${todoId}`, async ({ request }) => {
-
-            const response = await request.delete(`${BASE_URL}/todos/${todoId}`)
-
-            expect(response.ok()).toBeTruthy();
-            expect(response.status()).toBe(200);
-
-            const data = await response.json();
-            expect(typeof data).toBe('object');
-            expect(data.id).not.toBeDefined();
-            expect(data.userId).not.toBeDefined();
-            expect(data.title).not.toBeDefined();
-            expect(data.completed).not.toBeDefined();
-        })
-
     });
+
+
+
+    test(`PATCH	/todos/${todoId}`, async ({ request }) => {
+
+        const partial_update_todo = {
+            title: 'Partial update title'
+        };
+
+
+        const response = await request.patch(`${BASE_URL}/todos/${todoId}`, {
+            data: partial_update_todo
+        })
+
+        expect(response.ok()).toBeTruthy();
+        expect(response.status()).toBe(200);
+
+        const data = await response.json();
+        expect(data.id).toBe(todoId);
+        expect(data.title).toBe(partial_update_todo.title);
+        expect(data.userId).toBeDefined();
+        expect(data.completed).toBeDefined();
+
+    })
+
+    test(`DELETE	/todos/${todoId}`, async ({ request }) => {
+
+        const response = await request.delete(`${BASE_URL}/todos/${todoId}`)
+
+        expect(response.ok()).toBeTruthy();
+        expect(response.status()).toBe(200);
+
+        const data = await response.json();
+        expect(typeof data).toBe('object');
+        expect(data.id).not.toBeDefined();
+        expect(data.userId).not.toBeDefined();
+        expect(data.title).not.toBeDefined();
+        expect(data.completed).not.toBeDefined();
+    })
+
 });

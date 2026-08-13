@@ -8,4 +8,4 @@ node_modules/
 /playwright/.auth/
 tests/todo1.spec.ts
 tests/post1.spec.ts
-gi
+\sevagir.ts
