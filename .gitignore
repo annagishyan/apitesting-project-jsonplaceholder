@@ -6,3 +6,5 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+/playwright/tests/todo1.spec.ts
+/playwright/tests/post1.spec.ts
