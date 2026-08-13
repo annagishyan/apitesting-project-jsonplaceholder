@@ -1,11 +1,11 @@
-
 # Playwright
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-tests/todo1.spec.ts
-tests/post1.spec.ts
-\sevagir.ts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+tests/todos1.spec.ts
+tests/posts1.spec.ts
+sevagir.ts
