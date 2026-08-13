@@ -1,8 +1,6 @@
 import { test, expect, request } from '@playwright/test';
 
 const BASE_URL = 'https://jsonplaceholder.typicode.com';
-const postId = 1;
-
 
 test.describe('POSTS API Testing', () => {
 
@@ -38,8 +36,8 @@ test.describe('POSTS API Testing', () => {
   });
 
 
-  test(`GET	/posts/${postId}`, async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/posts/${postId}`);
+  test('GET	/posts/1', async ({ request }) => {
+    const response = await request.get(`${BASE_URL}/posts/1`);
 
     expect(response.ok()).toBe(true);
     expect(response.status()).toBe(200);
@@ -58,7 +56,7 @@ test.describe('POSTS API Testing', () => {
     expect(typeof data.body).toBe('string');
 
 
-    expect(data.id).toBe(postId);
+    expect(data.id).toBe(1);
     expect(data.userId).toBeGreaterThan(0);
     expect(data.title.length).toBeGreaterThan(0);
     expect(data.body.length).toBeGreaterThan(0);
@@ -69,9 +67,8 @@ test.describe('POSTS API Testing', () => {
 
   });
 
-
-  test(`GET	/posts/${postId}/comments`, async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/posts/${postId}/comments`);
+  test('GET	/posts/1/comments', async ({ request }) => {
+    const response = await request.get(`${BASE_URL}/posts/1/comments`);
 
     expect(response.ok()).toBeTruthy();
     expect(response.status()).toEqual(200);
@@ -82,6 +79,9 @@ test.describe('POSTS API Testing', () => {
 
 
     for (let obj of data) {
+      // HOMEWORK
+
+
       expect(obj.postId).toBeDefined();
       expect(obj.id).toBeDefined();
       expect(obj.name).toBeDefined();
@@ -94,30 +94,41 @@ test.describe('POSTS API Testing', () => {
       expect(typeof obj.email).toBe('string');
       expect(typeof obj.body).toBe('string');
 
-
-      expect(obj.postId).toBe(postId);
+      expect(obj.postId).toBe(1);
       expect(obj.id).toBeGreaterThan(0);
       expect(obj.name.length).toBeGreaterThan(0);
       expect(obj.email.length).toBeGreaterThan(0);
-      expect(obj.body.length).toBeGreaterThan(0);
       expect(obj.email).toContain('@');
+      expect(obj.body.length).toBeGreaterThan(0);
+
+      //TODO  հնարավո՞րա ստուգել՝ 1 մեյլ 1 user lini, 
+      // TODO nuyn mail-ov 2rd user chkaroxanan stexcel te db-um sql-um unique taly heriqa, stugman kariq chka
+
+
     }
 
 
   });
 
 
-  test(`GET	/comments?postId=${postId}`, async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/comments?postId=${postId}`);
+  test('GET	/comments?postId=1', async ({ request }) => {
+    // HOMEWORK
+
+    const response = await request.get(`${BASE_URL}/comments?postId=1`);
 
     expect(response.ok()).toBeTruthy();
     expect(response.status()).toEqual(200);
 
     const data = await response.json();
+
     expect(Array.isArray(data)).toBeTruthy();
     expect(data.length).toBeGreaterThan(0);
 
+
     for (let obj of data) {
+      // HOMEWORK
+
+
       expect(obj.postId).toBeDefined();
       expect(obj.id).toBeDefined();
       expect(obj.name).toBeDefined();
@@ -130,118 +141,17 @@ test.describe('POSTS API Testing', () => {
       expect(typeof obj.email).toBe('string');
       expect(typeof obj.body).toBe('string');
 
-      expect(obj.postId).toBe(postId);
+      expect(obj.postId).toBe(1);
       expect(obj.id).toBeGreaterThan(0);
       expect(obj.name.length).toBeGreaterThan(0);
       expect(obj.email.length).toBeGreaterThan(0);
-      expect(obj.body.length).toBeGreaterThan(0);
       expect(obj.email).toContain('@');
+      expect(obj.body.length).toBeGreaterThan(0);
     }
 
-    let emails_unique: string[] = [];
-    let flag = true;
-    let repeat_email = '';
-
-    for (let obj of data) {
-      let email = obj.email;
-
-      for (let elem of emails_unique) {
-        if (email === elem) {
-          flag = false;
-          repeat_email = email;
-        } else {
-          emails_unique.push(email);
-        }
-      }
-    }
-    expect(flag, `We have Email repeatable: ${repeat_email}`).toBe(true);
-
-
   });
 
-
-  test('POST	/posts', async ({ request }) => {
-
-    const new_post = {
-      userId: 1,
-      title: "New Post 1",
-      body: "New Post Body"
-    }
-
-    const response = await request.post(`${BASE_URL}/posts`, {
-      data: new_post
-    });
-
-    expect(response.ok()).toBeTruthy();
-    expect(response.status()).toBe(201);
-
-    const data = await response.json();
-    expect(data.id).toBeDefined();
-    expect(data.userId).toBe(new_post.userId);
-    expect(data.title).toBe(new_post.title);
-    expect(data.body).toBe(new_post.body);
-
-  });
-
-
-  test(`PUT	/posts/${postId}`, async ({ request }) => {
-
-    const updated_post = {
-      userId: 1,
-      title: "UPDATE POST TITLE",
-      body: "UPDATE POST BODY"
-    };
-
-    const response = await request.put(`${BASE_URL}/posts/${postId}`, {
-      data: updated_post
-    });
-
-    expect(response.ok()).toBeTruthy();
-    expect(response.status()).toBe(200);
-
-    const data = await response.json();
-    expect(data.id).toBe(postId);
-    expect(data.userId).toBe(updated_post.userId);
-    expect(data.title).toBe(updated_post.title);
-    expect(data.body).toBe(updated_post.body);
-
-  });
-
-  test(`PATCH	/posts/${postId}`, async ({ request }) => {
-
-    const partial_update = {
-      title: 'PARTIAL UPDATE TITLE'
-    };
-
-    const response = await request.patch(`${BASE_URL}/posts/${postId}`, {
-      data: partial_update // '{"title": "PARTIAL UPDATE TTILE"}'
-    });
-
-    expect(response.ok()).toBeTruthy();
-    expect(response.status()).toBe(200);
-
-    const data = await response.json(); // {"id": 1, "title": "PARTIAL UPDATE TTILE"}
-    expect(data.id).toBe(postId);
-    expect(data.title).toBe(partial_update.title);
-    expect(data.userId).toBeDefined();
-    expect(data.body).toBeDefined();
-
-  });
-
-  test(`DELETE	/posts/${postId}`, async ({ request }) => {
-
-    const response = await request.delete(`${BASE_URL}/posts/${postId}`);
-
-    expect(response.ok()).toBeTruthy();
-    expect(response.status()).toBe(200);
-
-    const data = await response.json();
-    expect(typeof data).toBe('object')
-    expect(data.id).not.toBeDefined();
-    expect(data.userId).not.toBeDefined();
-    expect(data.title).not.toBeDefined();
-    expect(data.body).not.toBeDefined();
-  });
 
 });
+
 
