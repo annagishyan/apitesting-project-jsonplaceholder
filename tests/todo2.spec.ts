@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 const todoId = 1;
 
 
-const BASE_URL = 'https://jsonplaceholder.typicode.com/'
+const BASE_URL = 'https://jsonplaceholder.typicode.com/';
 
 test.describe('TODOS API TESTING', () => {
 
@@ -83,12 +83,15 @@ test.describe('TODOS API TESTING', () => {
         let userId: number;
 
         await test.step('GET userId from users list', async () => {
-            const response_users = await request.get('https://jsonplaceholder.typicode.com/users');
+            const response_users = await request.get('https://jsonplaceholder.typicode.com/users')
             expect(response_users.ok()).toBeTruthy();
             expect(response_users.status()).toBe(200);
+
             const data_users = await response_users.json();
+
             expect(Array.isArray(data_users)).toBeTruthy();
             expect(data_users.length).toBeGreaterThan(0);
+
             userId = data_users[0].id;
         });
 
@@ -116,7 +119,7 @@ test.describe('TODOS API TESTING', () => {
             expect(data.completed).toBe(new_todos.completed);
         });
 
-    })
+    });
 
     test(`PUT	/todos/${todoId}`, async ({ request }) => {
 
@@ -126,6 +129,7 @@ test.describe('TODOS API TESTING', () => {
         let userId: number;
 
         await test.step('GET userId from users list', async () => {
+
             const response_users = await request.get('https://jsonplaceholder.typicode.com/users');
             expect(response_users.ok()).toBeTruthy();
             expect(response_users.status()).toBe(200);
@@ -145,7 +149,7 @@ test.describe('TODOS API TESTING', () => {
                 completed: false
             }
 
-            const response = await request.post(`${BASE_URL}/todos`, {
+            const response = await request.put(`${BASE_URL}/todos/${todoId}`, {
                 data: update_todos
             })
 
@@ -155,49 +159,50 @@ test.describe('TODOS API TESTING', () => {
             const data = await response.json();
 
             expect(data.id).toBeDefined();
+            expect(data.id).toBe(todoId);
             expect(data.userId).toBe(update_todos.userId);
             expect(data.title).toBe(update_todos.title);
             expect(data.completed).toBe(update_todos.completed);
         });
+    });
 
 
 
-        test(`PATCH	/todos/${todoId}`, async ({ request }) => {
+    test(`PATCH	/todos/${todoId}`, async ({ request }) => {
 
-            const partial_update_todo = {
-                title: 'Partial update title'
-            };
+        const partial_update_todo = {
+            title: 'Partial update title'
+        };
 
 
-            const response = await request.patch(`${BASE_URL}/todos/${todoId}`, {
-                data: partial_update_todo
-            })
-
-            expect(response.ok()).toBeTruthy();
-            expect(response.status()).toBe(200);
-
-            const data = await response.json();
-            expect(data.id).toBe(todoId);
-            expect(data.title).toBe(partial_update_todo.title);
-            expect(data.userId).toBeDefined();
-            expect(data.completed).toBeDefined();
-
+        const response = await request.patch(`${BASE_URL}/todos/${todoId}`, {
+            data: partial_update_todo
         })
 
-        test(`DELETE	/todos/${todoId}`, async ({ request }) => {
+        expect(response.ok()).toBeTruthy();
+        expect(response.status()).toBe(200);
 
-            const response = await request.delete(`${BASE_URL}/todos/${todoId}`)
-
-            expect(response.ok()).toBeTruthy();
-            expect(response.status()).toBe(200);
-
-            const data = await response.json();
-            expect(typeof data).toBe('object');
-            expect(data.id).not.toBeDefined();
-            expect(data.userId).not.toBeDefined();
-            expect(data.title).not.toBeDefined();
-            expect(data.completed).not.toBeDefined();
-        })
+        const data = await response.json();
+        expect(data.id).toBe(todoId);
+        expect(data.title).toBe(partial_update_todo.title);
+        expect(data.userId).toBeDefined();
+        expect(data.completed).toBeDefined();
 
     });
+
+    test(`DELETE	/todos/${todoId}`, async ({ request }) => {
+
+        const response = await request.delete(`${BASE_URL}/todos/${todoId}`)
+
+        expect(response.ok()).toBeTruthy();
+        expect(response.status()).toBe(200);
+
+        const data = await response.json();
+        expect(typeof data).toBe('object');
+        expect(data.id).not.toBeDefined();
+        expect(data.userId).not.toBeDefined();
+        expect(data.title).not.toBeDefined();
+        expect(data.completed).not.toBeDefined();
+    });
+
 });
