@@ -154,7 +154,7 @@ test.describe('TODOS API TESTING', () => {
             })
 
             expect(response.ok()).toBeTruthy();
-            expect(response.status()).toBe(202);
+            expect(response.status()).toBe(200);
 
             const data = await response.json();
 
