@@ -5,6 +5,14 @@ test.describe.serial('API restful-booker.', () => {
   let token: string;
   let bookingId: number;
 
+  test('Ping', async({request})=>{
+    const response = await request.get('https://restful-booker.herokuapp.com/ping');
+
+    expect(response.status()).toBe(201);
+    expect(response.ok()).toBeTruthy();
+
+  });
+
   test('Auth - CreateToken', async ({ request }) => {
 
     const response = await request.post(`https://restful-booker.herokuapp.com/auth`, {
