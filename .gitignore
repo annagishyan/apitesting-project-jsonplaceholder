@@ -9,3 +9,4 @@ playwright/.auth/
 tests/todos1.spec.ts
 tests/posts1.spec.ts
 /sevagir.ts
+tests/example-hayk.spec.ts
